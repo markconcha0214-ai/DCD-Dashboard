@@ -1,168 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Dashboard</title>
-
-  <link 
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
-    rel="stylesheet">
-  
-  <link 
-    rel="stylesheet" 
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
   <style>
-  :root { --nav-h: 62px; } /* adjust if your navbar height changes */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
 
-  html, body { height: 100%; }
-  body { margin: 0; overflow: hidden; } /* no page margins, no outside scroll */
+    html, body { height: 100%; }
+    body { overflow: hidden; }
 
-  /* Make navbar fixed so content can fill the rest of the screen */
-  .navbar-modern{
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 1000;
-  }
+    /* Top Navigation Bar */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      background: #0f172a;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      z-index: 1000;
+    }
 
-  /* Full-bleed pages area */
-  .pages-root{
-    position: fixed;
-    top: var(--nav-h);
-    left: 0; right: 0; bottom: 0;
-  }
+    .navbar .logo {
+      font-weight: bold;
+      font-size: 18px;
+      margin-right: 32px;
+      white-space: nowrap;
+    }
 
-  /* Each page fills the available area */
-  .page{
-    width: 100%;
-    height: 100%;
-  }
+    .navbar a {
+      color: #cbd5e1;
+      text-decoration: none;
+      margin-right: 20px;
+      font-size: 14px;
+    }
+    .navbar a:hover { color: #ffffff; }
 
-  /* Full-bleed iframe */
-  .looker-embed{
-    width: 100%;
-    height: 100%;
-    border: 0;
-    display: block;
-  }
-</style>
+    /* Full-screen content area under navbar */
+    .content {
+      position: fixed;
+      top: 60px;  /* same as navbar height */
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100vw;
+      height: calc(100vh - 60px);
+      background: #fff;
+    }
 
+    /* Make iframe truly fill the available space */
+    .content iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+  </style>
 </head>
-
-<body class="bg-light">
-
-<nav class="navbar navbar-expand-lg navbar-modern shadow-lg">
-  <div class="container-fluid px-3 px-lg-4">
-
-    <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
-      <img 
-        src="images/logo.png"
-        alt="Logo"
-        class="me-2 navbar-logo">
-    </a>
-
-    <!-- Mobile Toggle -->
-    <button 
-      class="navbar-toggler" 
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#mainNavbar">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!-- Links -->
-    <div class="collapse navbar-collapse" id="mainNavbar">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-
-        <li class="nav-item">
-          <a class="nav-link active" href="#" onclick="showPage(event, 'overview')">
-            <i class="fas fa-home me-1"></i> Overview
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#" onclick="showPage(event, 'jobs')">
-            <i class="fas fa-briefcase me-1"></i> Jobs & Value
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#" onclick="showPage(event, 'categories')">
-            <i class="fas fa-list-alt me-1"></i> Categories
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#" onclick="showPage(event, 'sales')">
-            <i class="fas fa-chart-bar me-1"></i> Sales
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#" onclick="showPage(event, 'operations')">
-            <i class="fas fa-cogs me-1"></i> Operations
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#" onclick="showPage(event, 'people')">
-            <i class="fas fa-users me-1"></i> People Rollups
-          </a>
-        </li>
-
-      </ul>
-    </div>
+<body>
+  <div class="navbar">
+    <div class="logo">Company Dashboards</div>
+    <a href="#">Overview</a>
+    <a href="#">Operations</a>
+    <a href="#">Finance</a>
+    <a href="#">Performance</a>
   </div>
-</nav>
 
-<!-- Main Content -->
-<!-- Main Content (FULL BLEED) -->
-<div class="pages-root">
-
-  <!-- ================= Overview ================= -->
-  <div id="overview" class="page">
+  <div class="content">
     <iframe
-      class="looker-embed"
       src="https://lookerstudio.google.com/embed/reporting/de8cbf51-c1ce-4be6-90cf-2f0f078209ea/page/KCTmF"
       allowfullscreen
       sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
     </iframe>
   </div>
-
-  <!-- ================= Jobs ================= -->
-  <div id="jobs" class="page d-none">
-    <!-- your placeholder content -->
-  </div>
-
-  <!-- ================= Categories ================= -->
-  <div id="categories" class="page d-none"></div>
-
-  <!-- ================= Sales ================= -->
-  <div id="sales" class="page d-none"></div>
-
-  <!-- ================= Operations ================= -->
-  <div id="operations" class="page d-none"></div>
-
-  <!-- ================= People ================= -->
-  <div id="people" class="page d-none"></div>
-
-</div>
-
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Page Switch Script -->
-<script>
-  function showPage(evt, pageId) {
-    document.querySelectorAll('.page').forEach(p => p.classList.add('d-none'));
-    document.getElementById(pageId).classList.remove('d-none');
-
-    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-    evt.currentTarget.classList.add('active');
-  }
-</script>
-
-
 </body>
 </html>
