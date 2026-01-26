@@ -1,57 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard</title>
+  <meta charset="UTF-8">
+  <title>My Dashboard</title>
+
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
+    rel="stylesheet">
+  
+  <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-
-    html, body { height: 100%; }
-    body { overflow: hidden; }
-
-    /* Top Navigation Bar */
-    .navbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 60px;
-      background: #0f172a;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      padding: 0 24px;
-      z-index: 1000;
+    :root {
+      --primary-gradient: linear-gradient(135deg, #076caf 0%, #19277a 100%);
+      --hover-gradient: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
     }
 
-    .navbar .logo {
-      font-weight: bold;
-      font-size: 18px;
-      margin-right: 32px;
-      white-space: nowrap;
+    .navbar-modern {
+      background: linear-gradient(135deg, #c7e3ee 0%, #127c9c 100%);
+      padding: 0.6rem 0; 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
     }
 
-    .navbar a {
-      color: #cbd5e1;
-      text-decoration: none;
-      margin-right: 20px;
-      font-size: 14px;
+    .nav-link {
+      position: relative;
+      margin: 0 3px;
+      padding: 0.4rem 0.8rem !important;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      color: #e2e8f0 !important;
+      font-weight: 500;
+      font-size: 0.9rem; 
     }
-    .navbar a:hover { color: #ffffff; }
 
-    /* Full-screen content area under navbar */
-    .content {
-      position: fixed;
-      top: 60px;  /* same as navbar height */
-      left: 0;
-      right: 0;
+    .nav-link i { font-size: 0.85rem; }
+
+    .nav-link:hover {
+      background: rgba(102, 126, 234, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .nav-link.active {
+      background: var(--primary-gradient);
+      color: white !important;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
       bottom: 0;
-      width: 100vw;
-      height: calc(100vh - 60px);
-      background: #fff;
+      left: 50%;
+      background: var(--primary-gradient);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
     }
 
-    /* Make iframe truly fill the available space */
-    .content iframe {
+    .nav-link:hover:after { width: 70%; }
+    .nav-link.active:after { display: none; }
+
+    .navbar-toggler {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.35rem 0.5rem; 
+    }
+
+    .navbar-toggler:focus {
+      box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3);
+    }
+
+    @media (max-width: 991.98px) {
+      .navbar-collapse {
+        background: linear-gradient(135deg, #126f94 0%, #145f9c 100%);
+        border-radius: 12px;
+        padding: 0.8rem; 
+        margin-top: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .nav-link { margin: 3px 0; }
+    }
+
+    .navbar-logo {
+      height: 40px;
+      width: auto;
+      border-radius: 6px;
+      object-fit: contain;
+    }
+
+    /* Make the Looker iframe full-width and not inside a box/card */
+    .looker-wrap {
+      width: 100%;
+      height: calc(100vh - 72px); /* adjust if you change header spacing */
+      min-height: 600px;
+    }
+    .looker-wrap iframe{
       width: 100%;
       height: 100%;
       border: 0;
@@ -59,21 +106,147 @@
     }
   </style>
 </head>
-<body>
-  <div class="navbar">
-    <div class="logo">Company Dashboards</div>
-    <a href="#">Overview</a>
-    <a href="#">Operations</a>
-    <a href="#">Finance</a>
-    <a href="#">Performance</a>
+
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-modern shadow-lg">
+  <div class="container-fluid px-3 px-lg-4">
+
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+      <img 
+        src="images/logo.png"
+        alt="Logo"
+        class="me-2 navbar-logo">
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button 
+      class="navbar-toggler" 
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#mainNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Links -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+        <li class="nav-item">
+          <a class="nav-link active" href="#" onclick="showPage(event, 'overview')">
+            <i class="fas fa-home me-1"></i> Overview
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showPage(event, 'jobs')">
+            <i class="fas fa-briefcase me-1"></i> Jobs & Value
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showPage(event, 'categories')">
+            <i class="fas fa-list-alt me-1"></i> Categories
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showPage(event, 'sales')">
+            <i class="fas fa-chart-bar me-1"></i> Sales
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showPage(event, 'operations')">
+            <i class="fas fa-cogs me-1"></i> Operations
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showPage(event, 'people')">
+            <i class="fas fa-users me-1"></i> People Rollups
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container-fluid px-0">
+
+  <!-- ================= Overview ================= -->
+  <div id="overview" class="page">
+    <div class="looker-wrap">
+      <iframe
+        src="https://lookerstudio.google.com/embed/reporting/de8cbf51-c1ce-4be6-90cf-2f0f078209ea/page/KCTmF"
+        allowfullscreen
+        sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
+      </iframe>
+    </div>
   </div>
 
-  <div class="content">
-    <iframe
-      src="https://lookerstudio.google.com/embed/reporting/de8cbf51-c1ce-4be6-90cf-2f0f078209ea/page/KCTmF"
-      allowfullscreen
-      sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
-    </iframe>
+  <!-- ================= Jobs ================= -->
+  <div id="jobs" class="page d-none">
+    <div class="card shadow p-4 text-center">
+      <h3>Jobs & Value</h3>
+      <p class="text-muted mt-2">This is the Jobs & Value page.</p>
+      <div class="alert alert-info mt-3">Placeholder for Jobs reports.</div>
+    </div>
   </div>
+
+  <!-- ================= Categories ================= -->
+  <div id="categories" class="page d-none">
+    <div class="card shadow p-4 text-center">
+      <h3>Job Categories</h3>
+      <div class="alert alert-warning mt-3">Categories content coming soon.</div>
+    </div>
+  </div>
+
+  <!-- ================= Sales ================= -->
+  <div id="sales" class="page d-none">
+    <div class="card shadow p-4 text-center">
+      <h3>Sales Dashboard</h3>
+      <div class="alert alert-success mt-3">Sales analytics will appear here.</div>
+    </div>
+  </div>
+
+  <!-- ================= Operations ================= -->
+  <div id="operations" class="page d-none">
+    <div class="card shadow p-4 text-center">
+      <h3>Operations</h3>
+      <div class="alert alert-secondary mt-3">Operations reports coming soon.</div>
+    </div>
+  </div>
+
+  <!-- ================= People ================= -->
+  <div id="people" class="page d-none">
+    <div class="card shadow p-4 text-center">
+      <h3>People Rollups</h3>
+      <div class="alert alert-primary mt-3">HR & People data here.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Page Switch Script -->
+<script>
+  function showPage(evt, pageId) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(page => page.classList.add('d-none'));
+
+    // Show selected page
+    document.getElementById(pageId).classList.remove('d-none');
+
+    // Update active nav
+    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+    evt.currentTarget.classList.add('active');
+  }
+</script>
+
 </body>
 </html>
