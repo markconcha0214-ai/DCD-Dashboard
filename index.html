@@ -4,18 +4,16 @@
   <meta charset="UTF-8">
   <title>My Dashboard</title>
 
-  <!-- Bootstrap CSS -->
   <link 
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
     rel="stylesheet">
   
-  <!-- Font Awesome for icons -->
   <link 
     rel="stylesheet" 
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
  <style>
-    /* Custom Styles */
+
     :root {
     --primary-gradient: linear-gradient(135deg, #076caf 0%, #19277a 100%);
     --hover-gradient: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
@@ -23,40 +21,40 @@
 
     .navbar-modern {
     background: linear-gradient(135deg, #c7e3ee 0%, #127c9c 100%);
-    padding: 0.6rem 0; /* slightly smaller padding */
+    padding: 0.6rem 0; 
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     }
 
-    /* Brand text smaller */
+  
     .brand-gradient {
     background: white;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 700;
-    font-size: 1rem; /* reduced from 1.1rem */
+    font-size: 1rem; 
     }
 
     .brand-gradient i {
-    margin-right: 6px; /* slightly closer to text */
-    font-size: 0.95rem; /* smaller icon */
+    margin-right: 6px; 
+    font-size: 0.95rem; 
     }
 
-    /* Nav links smaller */
+
     .nav-link {
     position: relative;
     margin: 0 3px;
-    padding: 0.4rem 0.8rem !important; /* slightly smaller padding */
+    padding: 0.4rem 0.8rem !important;
     border-radius: 8px;
     transition: all 0.3s ease;
     color: #e2e8f0 !important;
     font-weight: 500;
-    font-size: 0.9rem; /* smaller font size */
+    font-size: 0.9rem; 
     }
 
     .nav-link i {
-    font-size: 0.85rem; /* smaller icons in links */
+    font-size: 0.85rem;
     }
 
     .nav-link:hover {
@@ -92,19 +90,18 @@
 
     .navbar-toggler {
     border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 0.35rem 0.5rem; /* slightly smaller toggle */
+    padding: 0.35rem 0.5rem; 
     }
 
     .navbar-toggler:focus {
     box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3);
     }
 
-    /* Mobile menu adjustments */
     @media (max-width: 991.98px) {
     .navbar-collapse {
         background: linear-gradient(135deg, #126f94 0%, #145f9c 100%);
         border-radius: 12px;
-        padding: 0.8rem; /* slightly smaller padding */
+        padding: 0.8rem; 
         margin-top: 10px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -115,7 +112,7 @@
     }
     }
 
-    /* Smooth transition for mobile menu */
+
     .collapse:not(.show) {
     display: none;
     }
@@ -126,7 +123,6 @@
     transition: height 0.35s ease;
     }
 
-    /* Navbar Logo */
     .navbar-logo {
     height: 40px;
     width: auto;
@@ -143,15 +139,11 @@
 <nav class="navbar navbar-expand-lg navbar-modern shadow-lg">
   <div class="container-fluid px-3 px-lg-4">
 
-    <!-- Brand with Logo -->
     <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
-
-      <!-- Logo Image -->
       <img 
         src="images/logo.png"
         alt="Logo"
         class="me-2 navbar-logo">
-
     </a>
 
     <!-- Mobile Toggle -->
