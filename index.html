@@ -92,10 +92,10 @@
       object-fit: contain;
     }
 
-    /* Make the Looker iframe full-width and not inside a box/card */
+    /* Full-screen Looker embed area (same for all pages) */
     .looker-wrap {
       width: 100%;
-      height: calc(100vh - 72px); /* adjust if you change header spacing */
+      height: calc(100vh - 72px); /* navbar height allowance */
       min-height: 600px;
     }
     .looker-wrap iframe{
@@ -189,10 +189,12 @@
 
   <!-- ================= Jobs ================= -->
   <div id="jobs" class="page d-none">
-    <div class="card shadow p-4 text-center">
-      <h3>Jobs & Value</h3>
-      <p class="text-muted mt-2">This is the Jobs & Value page.</p>
-      <div class="alert alert-info mt-3">Placeholder for Jobs reports.</div>
+    <div class="looker-wrap">
+      <iframe
+        src="https://lookerstudio.google.com/embed/reporting/6c256dd5-b3c3-465b-8922-35ef11a6a5fd/page/KCTmF"
+        allowfullscreen
+        sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
+      </iframe>
     </div>
   </div>
 
