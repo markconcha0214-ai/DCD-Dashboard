@@ -193,7 +193,7 @@
   <div id="overview" class="page">
     <div class="looker-wrap">
       <iframe
-        src="https://lookerstudio.google.com/embed/reporting/de8cbf51-c1ce-4be6-90cf-2f0f078209ea/page/KCTmF"
+        data-src="https://lookerstudio.google.com/embed/reporting/de8cbf51-c1ce-4be6-90cf-2f0f078209ea/page/KCTmF"
         allowfullscreen
         sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
       </iframe>
@@ -204,7 +204,7 @@
   <div id="jobs" class="page">
     <div class="looker-wrap">
       <iframe
-        src="https://lookerstudio.google.com/embed/reporting/6c256dd5-b3c3-465b-8922-35ef11a6a5fd/page/KCTmF"
+        data-src="https://lookerstudio.google.com/embed/reporting/6c256dd5-b3c3-465b-8922-35ef11a6a5fd/page/KCTmF"
         allowfullscreen
         sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
       </iframe>
@@ -214,28 +214,28 @@
   <!-- ================= Categories ================= -->
   <div id="categories" class="page">
       <div class="looker-wrap">
-      <iframe width="1200" height="600" src="https://lookerstudio.google.com/embed/reporting/34365221-f6f2-4abc-b7a1-86a6942a822d/page/KCTmF" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+      <iframe width="1200" height="600" data-src="https://lookerstudio.google.com/embed/reporting/34365221-f6f2-4abc-b7a1-86a6942a822d/page/KCTmF" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
   </div>
     </div>
 
   <!-- ================= Sales ================= -->
   <div id="sales" class="page">
       <div class="looker-wrap">
-      <iframe width="1200" height="600" src="https://lookerstudio.google.com/embed/reporting/0e1c09d1-471d-4cdf-aba4-eb4c02c854a1/page/KCTmF" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+      <iframe width="1200" height="600" data-src="https://lookerstudio.google.com/embed/reporting/0e1c09d1-471d-4cdf-aba4-eb4c02c854a1/page/KCTmF" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
   </div>
     </div>
 
   <!-- ================= Operations ================= -->
   <div id="operations" class="page">
       <div class="looker-wrap">
-      <iframe width="1200" height="600" src="https://lookerstudio.google.com/embed/reporting/9643493d-8bb0-44ea-aa5e-2beb4af25c4c/page/KCTmF" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+      <iframe width="1200" height="600" data-src="https://lookerstudio.google.com/embed/reporting/9643493d-8bb0-44ea-aa5e-2beb4af25c4c/page/KCTmF" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
   </div>
     </div>
 
   <!-- ================= People ================= -->
   <div id="people" class="page">
       <div class="looker-wrap">
-      <iframe width="1200" height="600" src="https://lookerstudio.google.com/embed/reporting/0b5d72f8-b261-44cb-98b6-2ac890aac087/page/KCTmF" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+      <iframe width="1200" height="600" data-src="https://lookerstudio.google.com/embed/reporting/0b5d72f8-b261-44cb-98b6-2ac890aac087/page/KCTmF" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
   </div>
     </div>
 
@@ -248,32 +248,73 @@
 <script>
   const validPages = new Set(["overview", "jobs", "categories", "sales", "operations", "people"]);
 
+  function loadIframeIfNeeded(pageId) {
+    const iframe = document.querySelector(`#${pageId} iframe`);
+    if (!iframe) return;
+
+    // Lazy-load only once
+    if (!iframe.src) {
+      iframe.src = iframe.dataset.src;
+    }
+  }
+
+  function refreshIframe(pageId) {
+    const iframe = document.querySelector(`#${pageId} iframe`);
+    if (!iframe || !iframe.src) return;
+
+    // Force reload the iframe only (not the whole website)
+    const current = iframe.src;
+    iframe.src = "";
+    setTimeout(() => { iframe.src = current; }, 50);
+  }
+
   function renderPage(pageId) {
     const target = validPages.has(pageId) ? pageId : "overview";
 
-    // Show only the chosen page (no flash)
+    // Show only selected page
     document.querySelectorAll(".page").forEach(p => p.classList.remove("is-active"));
     const el = document.getElementById(target);
     if (el) el.classList.add("is-active");
 
-    // Update active nav
+    // Highlight active nav
     document.querySelectorAll(".nav-link").forEach(link => link.classList.remove("active"));
     const activeLink = document.querySelector(`.nav-link[href="#${target}"]`);
     if (activeLink) activeLink.classList.add("active");
+
+    // Load iframe for the selected page
+    loadIframeIfNeeded(target);
   }
 
-  // ✅ Always hard-refresh on nav click
+  // ✅ Fast navigation (no hard reload)
   function goTo(evt, pageId) {
     evt.preventDefault();
-    const base = window.location.href.split('#')[0].split('?')[0];
-    window.location.href = `${base}?r=${Date.now()}#${pageId}`;
+    const target = validPages.has(pageId) ? pageId : "overview";
+
+    // If clicking the same tab again, refresh only the iframe (optional behavior)
+    const current = (window.location.hash || "#overview").slice(1);
+    if (current === target) {
+      refreshIframe(target);
+      return;
+    }
+
+    // Update hash + render without reloading the site
+    window.location.hash = target;
+    renderPage(target);
   }
 
-  // Use the precomputed page so the correct one renders immediately
+  // On first load, show correct page and load only that iframe
   window.addEventListener("DOMContentLoaded", () => {
-    renderPage(window.__initialPage || "overview");
+    const pageFromHash = (window.location.hash || "#overview").slice(1);
+    renderPage(pageFromHash);
+  });
+
+  // If user manually changes hash (back/forward buttons)
+  window.addEventListener("hashchange", () => {
+    const pageFromHash = (window.location.hash || "#overview").slice(1);
+    renderPage(pageFromHash);
   });
 </script>
+
 
 </body>
 </html>
