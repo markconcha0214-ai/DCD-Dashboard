@@ -133,37 +133,37 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
         <li class="nav-item">
-          <a class="nav-link active" href="#" onclick="showPage(event, 'overview')">
+          <a class="nav-link active" href="#overview" onclick="showPage(event, 'overview')">...</a>
             <i class="fas fa-home me-1"></i> Overview
           </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="#" onclick="showPage(event, 'jobs')">
+          <a class="nav-link" href="#jobs" onclick="showPage(event, 'jobs')">...</a>
             <i class="fas fa-briefcase me-1"></i> Jobs & Value
           </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="#" onclick="showPage(event, 'categories')">
+          <a class="nav-link" href="#categories" onclick="showPage(event, 'categories')">...</a>
             <i class="fas fa-list-alt me-1"></i> Categories
           </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="#" onclick="showPage(event, 'sales')">
+          <a class="nav-link" href="#sales" onclick="showPage(event, 'sales')">...</a>
             <i class="fas fa-chart-bar me-1"></i> Sales
           </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="#" onclick="showPage(event, 'operations')">
+          <a class="nav-link" href="#operations" onclick="showPage(event, 'operations')">...</a>
             <i class="fas fa-cogs me-1"></i> Operations
           </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="#" onclick="showPage(event, 'people')">
+          <a class="nav-link" href="#people" onclick="showPage(event, 'people')">...</a>
             <i class="fas fa-users me-1"></i> People Rollups
           </a>
         </li>
@@ -237,18 +237,41 @@
 
 <!-- Page Switch Script -->
 <script>
-  function showPage(evt, pageId) {
+  const validPages = new Set(["overview", "jobs", "categories", "sales", "operations", "people"]);
+
+  function renderPage(pageId) {
     // Hide all pages
     document.querySelectorAll('.page').forEach(page => page.classList.add('d-none'));
 
-    // Show selected page
-    document.getElementById(pageId).classList.remove('d-none');
+    // Show selected page (fallback to overview)
+    const target = validPages.has(pageId) ? pageId : "overview";
+    document.getElementById(target).classList.remove('d-none');
 
-    // Update active nav
+    // Update active nav (match href hash)
     document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-    evt.currentTarget.classList.add('active');
+    const activeLink = document.querySelector(`.nav-link[href="#${target}"]`);
+    if (activeLink) activeLink.classList.add('active');
   }
+
+  function showPage(evt, pageId) {
+    evt.preventDefault();
+    // Update URL hash so refresh keeps the page
+    window.location.hash = pageId;
+    renderPage(pageId);
+  }
+
+  // On first load (and on manual hash changes), show the right page
+  window.addEventListener("load", () => {
+    const pageFromHash = window.location.hash.replace("#", "");
+    renderPage(pageFromHash);
+  });
+
+  window.addEventListener("hashchange", () => {
+    const pageFromHash = window.location.hash.replace("#", "");
+    renderPage(pageFromHash);
+  });
 </script>
+
 
 </body>
 </html>
