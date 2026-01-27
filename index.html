@@ -133,39 +133,39 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
   <li class="nav-item">
-    <a class="nav-link active" href="#overview" onclick="showPage(event, 'overview')">
-      <i class="fas fa-home me-1"></i> Overview
-    </a>
+   <a class="nav-link active" href="#overview" onclick="goTo(event,'overview')">
+  <i class="fas fa-home me-1"></i> Overview
+</a>
   </li>
 
   <li class="nav-item">
-    <a class="nav-link" href="#jobs" onclick="showPage(event, 'jobs')">
-      <i class="fas fa-briefcase me-1"></i> Jobs & Value
-    </a>
+    <a class="nav-link" href="#jobs" onclick="goTo(event,'jobs')">
+  <i class="fas fa-briefcase me-1"></i> Jobs & Value
+</a>
   </li>
 
   <li class="nav-item">
-    <a class="nav-link" href="#categories" onclick="showPage(event, 'categories')">
-      <i class="fas fa-list-alt me-1"></i> Categories
-    </a>
+   <a class="nav-link" href="#categories" onclick="goTo(event,'categories')">
+  <i class="fas fa-list-alt me-1"></i> Categories
+</a>
   </li>
 
   <li class="nav-item">
-    <a class="nav-link" href="#sales" onclick="showPage(event, 'sales')">
-      <i class="fas fa-chart-bar me-1"></i> Sales
-    </a>
+    <a class="nav-link" href="#sales" onclick="goTo(event,'sales')">
+  <i class="fas fa-chart-bar me-1"></i> Sales
+</a>
   </li>
 
   <li class="nav-item">
-    <a class="nav-link" href="#operations" onclick="showPage(event, 'operations')">
-      <i class="fas fa-cogs me-1"></i> Operations
-    </a>
+    <a class="nav-link" href="#operations" onclick="goTo(event,'operations')">
+  <i class="fas fa-cogs me-1"></i> Operations
+</a>
   </li>
 
   <li class="nav-item">
-    <a class="nav-link" href="#people" onclick="showPage(event, 'people')">
-      <i class="fas fa-users me-1"></i> People Rollups
-    </a>
+   <a class="nav-link" href="#people" onclick="goTo(event,'people')">
+  <i class="fas fa-users me-1"></i> People Rollups
+</a>
   </li>
 
 </ul>
@@ -241,27 +241,30 @@
   const validPages = new Set(["overview", "jobs", "categories", "sales", "operations", "people"]);
 
   function renderPage(pageId) {
+    const target = validPages.has(pageId) ? pageId : "overview";
+
     // Hide all pages
     document.querySelectorAll('.page').forEach(page => page.classList.add('d-none'));
 
-    // Show selected page (fallback to overview)
-    const target = validPages.has(pageId) ? pageId : "overview";
+    // Show selected page
     document.getElementById(target).classList.remove('d-none');
 
-    // Update active nav (match href hash)
+    // Update active nav
     document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
     const activeLink = document.querySelector(`.nav-link[href="#${target}"]`);
     if (activeLink) activeLink.classList.add('active');
   }
 
-  function showPage(evt, pageId) {
+  // 🔥 Hard refresh on nav click (even if same tab)
+  function goTo(evt, pageId) {
     evt.preventDefault();
-    // Update URL hash so refresh keeps the page
     window.location.hash = pageId;
-    renderPage(pageId);
+
+    // Force a full reload so embedded Looker re-inits cleanly
+    setTimeout(() => window.location.reload(), 0);
   }
 
-  // On first load (and on manual hash changes), show the right page
+  // On load + hash changes (after reload), show correct page
   window.addEventListener("load", () => {
     const pageFromHash = window.location.hash.replace("#", "");
     renderPage(pageFromHash);
@@ -272,6 +275,7 @@
     renderPage(pageFromHash);
   });
 </script>
+
 
 
 </body>
