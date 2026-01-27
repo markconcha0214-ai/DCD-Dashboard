@@ -11,6 +11,15 @@
   <link 
     rel="stylesheet" 
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- ✅ Prevent “flash to overview” before hash page is shown -->
+  <script>
+    (function () {
+      const valid = new Set(["overview","jobs","categories","sales","operations","people"]);
+      const page = (location.hash || "#overview").slice(1);
+      window.__initialPage = valid.has(page) ? page : "overview";
+    })();
+  </script>
   
   <style>
     :root {
@@ -104,6 +113,10 @@
       border: 0;
       display: block;
     }
+
+    /* ✅ prevent initial flash: hide all pages until JS activates one */
+    .page { display: none; }
+    .page.is-active { display: block; }
   </style>
 </head>
 
@@ -132,44 +145,43 @@
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
-  <li class="nav-item">
-   <a class="nav-link active" href="#overview" onclick="goTo(event,'overview')">
-  <i class="fas fa-home me-1"></i> Overview
-</a>
-  </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#overview" onclick="goTo(event,'overview')">
+            <i class="fas fa-home me-1"></i> Overview
+          </a>
+        </li>
 
-  <li class="nav-item">
-    <a class="nav-link" href="#jobs" onclick="goTo(event,'jobs')">
-  <i class="fas fa-briefcase me-1"></i> Jobs & Value
-</a>
-  </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#jobs" onclick="goTo(event,'jobs')">
+            <i class="fas fa-briefcase me-1"></i> Jobs & Value
+          </a>
+        </li>
 
-  <li class="nav-item">
-   <a class="nav-link" href="#categories" onclick="goTo(event,'categories')">
-  <i class="fas fa-list-alt me-1"></i> Categories
-</a>
-  </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#categories" onclick="goTo(event,'categories')">
+            <i class="fas fa-list-alt me-1"></i> Categories
+          </a>
+        </li>
 
-  <li class="nav-item">
-    <a class="nav-link" href="#sales" onclick="goTo(event,'sales')">
-  <i class="fas fa-chart-bar me-1"></i> Sales
-</a>
-  </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#sales" onclick="goTo(event,'sales')">
+            <i class="fas fa-chart-bar me-1"></i> Sales
+          </a>
+        </li>
 
-  <li class="nav-item">
-    <a class="nav-link" href="#operations" onclick="goTo(event,'operations')">
-  <i class="fas fa-cogs me-1"></i> Operations
-</a>
-  </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#operations" onclick="goTo(event,'operations')">
+            <i class="fas fa-cogs me-1"></i> Operations
+          </a>
+        </li>
 
-  <li class="nav-item">
-   <a class="nav-link" href="#people" onclick="goTo(event,'people')">
-  <i class="fas fa-users me-1"></i> People Rollups
-</a>
-  </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#people" onclick="goTo(event,'people')">
+            <i class="fas fa-users me-1"></i> People Rollups
+          </a>
+        </li>
 
-</ul>
-
+      </ul>
     </div>
   </div>
 </nav>
@@ -189,7 +201,7 @@
   </div>
 
   <!-- ================= Jobs ================= -->
-  <div id="jobs" class="page d-none">
+  <div id="jobs" class="page">
     <div class="looker-wrap">
       <iframe
         src="https://lookerstudio.google.com/embed/reporting/6c256dd5-b3c3-465b-8922-35ef11a6a5fd/page/KCTmF"
@@ -200,7 +212,7 @@
   </div>
 
   <!-- ================= Categories ================= -->
-  <div id="categories" class="page d-none">
+  <div id="categories" class="page">
     <div class="card shadow p-4 text-center">
       <h3>Job Categories</h3>
       <div class="alert alert-warning mt-3">Categories content coming soon.</div>
@@ -208,7 +220,7 @@
   </div>
 
   <!-- ================= Sales ================= -->
-  <div id="sales" class="page d-none">
+  <div id="sales" class="page">
     <div class="card shadow p-4 text-center">
       <h3>Sales Dashboard</h3>
       <div class="alert alert-success mt-3">Sales analytics will appear here.</div>
@@ -216,7 +228,7 @@
   </div>
 
   <!-- ================= Operations ================= -->
-  <div id="operations" class="page d-none">
+  <div id="operations" class="page">
     <div class="card shadow p-4 text-center">
       <h3>Operations</h3>
       <div class="alert alert-secondary mt-3">Operations reports coming soon.</div>
@@ -224,7 +236,7 @@
   </div>
 
   <!-- ================= People ================= -->
-  <div id="people" class="page d-none">
+  <div id="people" class="page">
     <div class="card shadow p-4 text-center">
       <h3>People Rollups</h3>
       <div class="alert alert-primary mt-3">HR & People data here.</div>
@@ -243,40 +255,29 @@
   function renderPage(pageId) {
     const target = validPages.has(pageId) ? pageId : "overview";
 
-    // Hide all pages
-    document.querySelectorAll('.page').forEach(page => page.classList.add('d-none'));
-
-    // Show selected page
-    document.getElementById(target).classList.remove('d-none');
+    // Show only the chosen page (no flash)
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("is-active"));
+    const el = document.getElementById(target);
+    if (el) el.classList.add("is-active");
 
     // Update active nav
-    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+    document.querySelectorAll(".nav-link").forEach(link => link.classList.remove("active"));
     const activeLink = document.querySelector(`.nav-link[href="#${target}"]`);
-    if (activeLink) activeLink.classList.add('active');
+    if (activeLink) activeLink.classList.add("active");
   }
 
-  // 🔥 Hard refresh on nav click (even if same tab)
+  // ✅ Always hard-refresh on nav click
   function goTo(evt, pageId) {
     evt.preventDefault();
-    window.location.hash = pageId;
-
-    // Force a full reload so embedded Looker re-inits cleanly
-    setTimeout(() => window.location.reload(), 0);
+    const base = window.location.href.split('#')[0].split('?')[0];
+    window.location.href = `${base}?r=${Date.now()}#${pageId}`;
   }
 
-  // On load + hash changes (after reload), show correct page
-  window.addEventListener("load", () => {
-    const pageFromHash = window.location.hash.replace("#", "");
-    renderPage(pageFromHash);
-  });
-
-  window.addEventListener("hashchange", () => {
-    const pageFromHash = window.location.hash.replace("#", "");
-    renderPage(pageFromHash);
+  // Use the precomputed page so the correct one renders immediately
+  window.addEventListener("DOMContentLoaded", () => {
+    renderPage(window.__initialPage || "overview");
   });
 </script>
-
-
 
 </body>
 </html>
